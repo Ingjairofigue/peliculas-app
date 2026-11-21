@@ -170,7 +170,7 @@ DB_USER=<usuario>
 DB_PASSWORD=<contraseña>
 ```
 
-4. Render asignará una URL pública para la API (por ejemplo, `https://peliculas-api.onrender.com`).
+4. Render asignará una URL pública para la API (por ejemplo, `https://peliculas-api.onrender.com/api`).
 
 ### Frontend (Vercel)
 
