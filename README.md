@@ -170,7 +170,7 @@ DB_USER=<usuario>
 DB_PASSWORD=<contraseña>
 ```
 
-4. Render asignará una URL pública para la API (por ejemplo, `https://peliculas-api.onrender.com/api`).
+4. Render asignará una URL pública para la API (por ejemplo, `https://peliculas-api.onrender.com`).
 
 ### Frontend (Vercel)
 
@@ -178,7 +178,7 @@ DB_PASSWORD=<contraseña>
 2. Configurar la variable de entorno `REACT_APP_API_URL` con la URL pública del backend desplegado en Render:
 
 ```env
-REACT_APP_API_URL=https://peliculas-api.onrender.com
+REACT_APP_API_URL=https://peliculas-api.onrender.com/api
 ```
 
 3. Ejecutar el despliegue. Vercel publicará la aplicación y esta consumirá la API remota.
