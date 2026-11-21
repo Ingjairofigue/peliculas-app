@@ -1,0 +1,108 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+body {
+    background-color: #0f172a; /* Azul muy oscuro, elegante */
+    color: #e2e8f0; /* Blanco suave para no cansar la vista */
+    font-family: 'Inter', sans-serif;
+}
+
+/* Tarjetas con efecto suave */
+.card {
+    background-color: #1e293b !important;
+    border: 1px solid #334155 !important;
+    border-radius: 16px !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+/* Inputs suaves */
+.form-control, .form-select {
+    background-color: #0f172a !important;
+    border: 1px solid #334155 !important;
+    color: #f8fafc !important;
+    border-radius: 8px !important;
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: #0f172a !important;
+    border-color: #38bdf8 !important;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2) !important;
+    color: #f8fafc !important;
+}
+
+/* Tablas elegantes */
+.table {
+    color: #e2e8f0 !important;
+    --bs-table-bg: transparent !important;
+    --bs-table-hover-bg: #334155 !important;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+    color: #e2e8f0 !important;
+    background-color: rgba(255, 255, 255, 0.02) !important;
+}
+
+.table thead th {
+    border-bottom: 2px solid #334155 !important;
+    color: #94a3b8 !important;
+    font-weight: 600;
+}
+
+/* Botones modernos */
+.btn {
+    border-radius: 8px !important;
+    font-weight: 500;
+    padding: 8px 16px;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #10b981, #059669) !important;
+    border: none !important;
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+    border: none !important;
+    color: white !important;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #38bdf8, #0284c7) !important;
+    border: none !important;
+}
+
+/* Navbar flotante */
+.navbar {
+    background-color: rgba(30, 41, 59, 0.9) !important;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #334155;
+    padding: 15px 0;
+}
+
+/* Ajuste para que los textos secundarios se lean bien en modo oscuro */
+.text-muted {
+    color: #94a3b8 !important; /* Un gris claro azulado, muy elegante */
+}
+
+.form-label {
+    color: #cbd5e1 !important; /* Un gris casi blanco para los títulos de los campos */
+    font-weight: 500;
+}
+
+/* Forzar texto claro en las tablas y mantenerlo al hacer hover */
+.table > tbody > tr > td {
+    color: #cbd5e1 !important; 
+}
+
+.table > tbody > tr:hover > td {
+    color: #f8fafc !important; /* Se vuelve casi blanco al pasar el ratón */
+}
+
+/* Para los textos en negrita dentro de la tabla */
+.table .fw-bold {
+    color: #ffffff !important;
+}

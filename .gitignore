@@ -1,0 +1,53 @@
+# ==============================
+# .gitignore - Monorepo (React + Node/Express)
+# ==============================
+
+# ---- Dependencias ----
+node_modules/
+**/node_modules/
+
+# ---- Variables de entorno ----
+.env
+.env.*
+**/.env
+**/.env.*
+!.env.example
+**/!.env.example
+
+# ---- Builds ----
+build/
+**/build/
+dist/
+**/dist/
+
+# ---- Coverage ----
+coverage/
+**/coverage/
+
+# ---- Logs ----
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ---- Sistema operativo ----
+.DS_Store
+Thumbs.db
+
+# ---- Editores / IDE ----
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+
+# ---- Misc ----
+.cache/
+.tmp/
+*.local
+
+# ---- Respaldos de Alis ----
+**/.alicia_backups/
+*.bak
