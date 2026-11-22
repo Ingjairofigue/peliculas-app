@@ -1,2 +1,90 @@
-package.json 
-package-lock.json 
+# ============================================
+# .gitignore — Monorepo Node + React (Windows)
+# ============================================
+
+# --------------------------------------------
+# Dependencias
+# --------------------------------------------
+# node_modules en cualquier nivel del monorepo
+node_modules/
+**/node_modules/
+
+# --------------------------------------------
+# Build / salidas de compilación
+# --------------------------------------------
+build/
+dist/
+dist-ssr/
+**/build/
+**/dist/
+
+# --------------------------------------------
+# Variables de entorno y secretos
+# --------------------------------------------
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+
+# Copias de seguridad
+*.bak
+*.bak.*
+
+# Carpeta de backups internos en cualquier nivel
+.alicia_backups/
+**/.alicia_backups/
+
+# --------------------------------------------
+# Logs
+# --------------------------------------------
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --------------------------------------------
+# Archivos de sistema (Windows / macOS)
+# --------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --------------------------------------------
+# Editores
+# --------------------------------------------
+# VS Code: ignorar todo salvo settings.json compartido
+.vscode/*
+!.vscode/settings.json
+
+# JetBrains
+.idea/
+
+# --------------------------------------------
+# Cobertura de tests
+# --------------------------------------------
+coverage/
+**/coverage/
+
+# --------------------------------------------
+# Cachés
+# --------------------------------------------
+.cache/
+.parcel-cache/
+.eslintcache
+.turbo/
+
+# --------------------------------------------
+# Python (scripts y tooling auxiliar)
+# --------------------------------------------
+__pycache__/
+*.pyc
+*.pyo
+venv/
+
+# --------------------------------------------
+# Nota: package.json y package-lock.json
+# NO se ignoran (forman parte del proyecto)
+# --------------------------------------------
