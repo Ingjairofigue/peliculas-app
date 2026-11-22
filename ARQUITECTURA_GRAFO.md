@@ -1,5 +1,5 @@
 # Mapa de Arquitectura del Proyecto: Proyecto_Peliculas_Despliegue
-Generado: 2026-11-21 10:27
+Generado: 2026-11-22 14:26
 
 ## `frontend-peliculas\public\index.html`
 

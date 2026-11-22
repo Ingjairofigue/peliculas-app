@@ -1,0 +1,124 @@
+import { useState, useEffect } from 'react';
+import api from '../services/api';
+import Swal from 'sweetalert2';
+import { Clapperboard, PlusCircle, Save, XCircle, Edit, Trash2 } from 'lucide-react';
+
+const Tipos = () => {
+    const [tipos, setTipos] = useState([]);
+    const [formulario, setFormulario] = useState({ id: null, nombre: '', descripcion: '' });
+    const [editando, setEditando] = useState(false);
+
+    const cargarTipos = async () => {
+        try {
+            const res = await api.get('/tipos');
+            setTipos(res.data);
+        } catch (error) {
+            Swal.fire('Error', 'No se pudieron cargar los tipos', 'error');
+        }
+    };
+
+    useEffect(() => { cargarTipos(); }, []);
+
+    const handleChange = (e) => setFormulario({ ...formulario, [e.target.name]: e.target.value });
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            if (editando) {
+                await api.put(`/tipos/${formulario.id}`, formulario);
+                Swal.fire('¡Actualizado!', 'Tipo actualizado.', 'success');
+                setEditando(false);
+            } else {
+                await api.post('/tipos', formulario);
+                Swal.fire('¡Creado!', 'Tipo registrado.', 'success');
+            }
+            setFormulario({ id: null, nombre: '', descripcion: '' });
+            cargarTipos();
+        } catch (error) {
+            Swal.fire('Error', error.response?.data?.error || 'Hubo un problema', 'error');
+        }
+    };
+
+    const handleEditar = (t) => { setFormulario(t); setEditando(true); };
+
+    const handleEliminar = async (tipo) => {
+        const confirmacion = await Swal.fire({
+            title: '¿Eliminar tipo?',
+            text: `Se eliminará "${tipo.nombre}". Esta acción no se puede deshacer.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        });
+        if (!confirmacion.isConfirmed) return;
+        try {
+            await api.delete(`/tipos/${tipo.id}`);
+            Swal.fire('¡Eliminado!', 'El tipo ha sido eliminado.', 'success');
+            if (formulario.id === tipo.id) {
+                setEditando(false);
+                setFormulario({ id: null, nombre: '', descripcion: '' });
+            }
+            cargarTipos();
+        } catch (error) {
+            Swal.fire('No se pudo eliminar', error.response?.data?.error || 'Puede que esté en uso por una producción.', 'error');
+        }
+    };
+
+    return (
+        <div className="row">
+            <div className="col-md-4">
+                <div className="card border-0 shadow-sm">
+                    <div className="card-header bg-transparent border-bottom border-secondary d-flex align-items-center gap-2 py-3">
+                        <Clapperboard color="#f472b6" size={20} />
+                        <h5 className="mb-0 text-white">{editando ? 'Editar Tipo' : 'Nuevo Tipo'}</h5>
+                    </div>
+                    <div className="card-body">
+                        <form onSubmit={handleSubmit}>
+                            <div className="mb-3">
+                                <label className="form-label text-muted">Nombre (Ej: Película, Serie)</label>
+                                <input type="text" className="form-control" name="nombre" value={formulario.nombre} onChange={handleChange} required />
+                            </div>
+                            <div className="mb-4">
+                                <label className="form-label text-muted">Descripción</label>
+                                <textarea className="form-control" name="descripcion" value={formulario.descripcion} onChange={handleChange} rows="2"></textarea>
+                            </div>
+                            <button type="submit" className={`btn w-100 d-flex justify-content-center align-items-center gap-2 ${editando ? 'btn-warning' : 'btn-success'}`}>
+                                {editando ? <><Save size={18} /> Actualizar</> : <><PlusCircle size={18} /> Guardar</>}
+                            </button>
+                            {editando && (
+                                <button type="button" className="btn btn-outline-secondary w-100 mt-2 d-flex justify-content-center align-items-center gap-2" onClick={() => { setEditando(false); setFormulario({ id: null, nombre: '', descripcion: '' }); }}>
+                                    <XCircle size={18} /> Cancelar
+                                </button>
+                            )}
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div className="col-md-8">
+                <div className="card border-0 shadow-sm">
+                    <div className="card-header bg-transparent border-bottom border-secondary py-3">
+                        <h5 className="mb-0 text-white">Listado de Tipos</h5>
+                    </div>
+                    <div className="card-body">
+                        <table className="table table-hover align-middle">
+                            <thead><tr><th>ID</th><th>Nombre</th><th>Descripción</th><th>Acciones</th></tr></thead>
+                            <tbody>
+                                {tipos.map((t) => (
+                                    <tr key={t.id}>
+                                        <td className="text-muted">{t.id}</td>
+                                        <td className="fw-bold">{t.nombre}</td>
+                                        <td>{t.descripcion}</td>
+                                        <td><button className="btn btn-sm btn-outline-warning d-flex align-items-center gap-1" onClick={() => handleEditar(t)}><Edit size={14} /> Editar</button></td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+export default Tipos;

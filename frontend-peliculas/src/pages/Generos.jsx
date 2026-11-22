@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../services/api';
 import Swal from 'sweetalert2';
-import { Tags, PlusCircle, Edit, Save, XCircle } from 'lucide-react'; // <--- Iconos
+import { Tags, PlusCircle, Edit, Save, XCircle, Trash2 } from 'lucide-react'; // <--- Iconos
 
 const Generos = () => {
     const [generos, setGeneros] = useState([]);
@@ -40,6 +40,31 @@ const Generos = () => {
     };
 
     const handleEditar = (genero) => { setFormulario(genero); setEditando(true); };
+
+    const handleEliminar = async (genero) => {
+        const confirmacion = await Swal.fire({
+            title: '¿Eliminar género?',
+            text: `Se eliminará "${genero.nombre}". Esta acción no se puede deshacer.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        });
+        if (!confirmacion.isConfirmed) return;
+        try {
+            await api.delete(`/generos/${genero.id}`);
+            Swal.fire('¡Eliminado!', 'El género ha sido eliminado.', 'success');
+            if (formulario.id === genero.id) {
+                setEditando(false);
+                setFormulario({ id: null, nombre: '', descripcion: '', estado: 'Activo' });
+            }
+            cargarGeneros();
+        } catch (error) {
+            Swal.fire('No se pudo eliminar', error.response?.data?.error || 'Puede que esté en uso por una producción.', 'error');
+        }
+    };
 
     return (
         <div className="row">
@@ -103,9 +128,14 @@ const Generos = () => {
                                             </span>
                                         </td>
                                         <td>
-                                            <button className="btn btn-sm btn-outline-warning d-flex align-items-center gap-1" onClick={() => handleEditar(g)}>
-                                                <Edit size={14} /> Editar
-                                            </button>
+                                            <div className="d-flex gap-1">
+                                                <button className="btn btn-sm btn-outline-warning d-flex align-items-center gap-1" onClick={() => handleEditar(g)}>
+                                                    <Edit size={14} /> Editar
+                                                </button>
+                                                <button className="btn btn-sm btn-outline-danger d-flex align-items-center gap-1" onClick={() => handleEliminar(g)}>
+                                                    <Trash2 size={14} /> Eliminar
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}
