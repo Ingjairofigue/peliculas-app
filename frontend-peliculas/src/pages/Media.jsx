@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../services/api';
 import Swal from 'sweetalert2';
-import { Film, PlusCircle, Save, XCircle, Edit, Image as ImageIcon, PlayCircle, Calendar, Tag, Clapperboard } from 'lucide-react';
+import { Film, PlusCircle, Save, XCircle, Edit, Trash2, Image as ImageIcon, PlayCircle, Calendar, Tag, Clapperboard } from 'lucide-react';
 
 const Media = () => {
     const [medias, setMedias] = useState([]);
@@ -60,6 +60,31 @@ const Media = () => {
     };
 
     const handleEditar = (m) => { setFormulario(m); setEditando(true); };
+
+    const handleEliminar = async (media) => {
+        const confirmacion = await Swal.fire({
+            title: '¿Eliminar producción?',
+            text: `Se eliminará "${media.titulo}". Esta acción no se puede deshacer.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        });
+        if (!confirmacion.isConfirmed) return;
+        try {
+            await api.delete(`/media/${media.id}`);
+            Swal.fire('¡Eliminado!', 'La producción ha sido eliminada.', 'success');
+            if (formulario.id === media.id) {
+                setEditando(false);
+                setFormulario({ id: null, serial: '', titulo: '', sinopsis: '', url_pelicula: '', imagen_portada: '', anio_estreno: new Date().getFullYear(), genero_id: '', director_id: '', productora_id: '', tipo_id: '' });
+            }
+            cargarDatos();
+        } catch (error) {
+            Swal.fire('No se pudo eliminar', error.response?.data?.error || 'Hubo un problema al eliminar la producción.', 'error');
+        }
+    };
 
     return (
         <div className="row">
@@ -202,9 +227,14 @@ const Media = () => {
                                     <small className="text-muted d-flex align-items-center gap-1">
                                         <Clapperboard size={14} /> {m.director?.nombres}
                                     </small>
-                                    <button className="btn btn-sm btn-outline-warning d-flex align-items-center gap-1" onClick={() => handleEditar(m)}>
-                                        <Edit size={14} /> Editar
-                                    </button>
+                                    <div className="d-flex gap-1">
+                                        <button className="btn btn-sm btn-outline-warning d-flex align-items-center gap-1" onClick={() => handleEditar(m)}>
+                                            <Edit size={14} /> Editar
+                                        </button>
+                                        <button className="btn btn-sm btn-outline-danger d-flex align-items-center gap-1" onClick={() => handleEliminar(m)}>
+                                            <Trash2 size={14} /> Eliminar
+                                        </button>
+                                    </div>
                                 </div>
 
                             </div>

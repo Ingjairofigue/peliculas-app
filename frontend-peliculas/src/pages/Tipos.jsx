@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../services/api';
 import Swal from 'sweetalert2';
-import { Clapperboard, PlusCircle, Save, XCircle, Edit } from 'lucide-react';
+import { Clapperboard, PlusCircle, Save, XCircle, Edit, Trash2 } from 'lucide-react';
 
 const Tipos = () => {
     const [tipos, setTipos] = useState([]);
@@ -40,6 +40,31 @@ const Tipos = () => {
     };
 
     const handleEditar = (t) => { setFormulario(t); setEditando(true); };
+
+    const handleEliminar = async (tipo) => {
+        const confirmacion = await Swal.fire({
+            title: '¿Eliminar tipo?',
+            text: `Se eliminará "${tipo.nombre}". Esta acción no se puede deshacer.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        });
+        if (!confirmacion.isConfirmed) return;
+        try {
+            await api.delete(`/tipos/${tipo.id}`);
+            Swal.fire('¡Eliminado!', 'El tipo ha sido eliminado.', 'success');
+            if (formulario.id === tipo.id) {
+                setEditando(false);
+                setFormulario({ id: null, nombre: '', descripcion: '' });
+            }
+            cargarTipos();
+        } catch (error) {
+            Swal.fire('No se pudo eliminar', error.response?.data?.error || 'Puede que esté en uso por una producción.', 'error');
+        }
+    };
 
     return (
         <div className="row">
@@ -85,7 +110,12 @@ const Tipos = () => {
                                         <td className="text-muted">{t.id}</td>
                                         <td className="fw-bold">{t.nombre}</td>
                                         <td>{t.descripcion}</td>
-                                        <td><button className="btn btn-sm btn-outline-warning d-flex align-items-center gap-1" onClick={() => handleEditar(t)}><Edit size={14} /> Editar</button></td>
+                                        <td>
+                                            <div className="d-flex gap-1">
+                                                <button className="btn btn-sm btn-outline-warning d-flex align-items-center gap-1" onClick={() => handleEditar(t)}><Edit size={14} /> Editar</button>
+                                                <button className="btn btn-sm btn-outline-danger d-flex align-items-center gap-1" onClick={() => handleEliminar(t)}><Trash2 size={14} /> Eliminar</button>
+                                            </div>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
